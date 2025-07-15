@@ -1,0 +1,24 @@
+name: manifest
+summary: Hello World
+description: The most basic example of a rock.
+version: "latest"
+license: Apache-2.0
+
+base: bare
+build-base: ubuntu@22.04
+platforms:
+  amd64:
+
+parts:
+  busybox:
+    plugin: nil
+    stage-packages:
+      - busybox
+
+  deb-security-manifest:
+    plugin: make
+    source: https://github.com/canonical/rocks-security-manifest
+    source-type: git
+    source-branch: main
+    override-prime: gen_manifest
+

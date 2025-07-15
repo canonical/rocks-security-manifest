@@ -1,0 +1,22 @@
+name: Tests
+
+on:
+  push:
+    branches: main
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-24.04  
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Environment
+      run: |
+        sudo snap install rockcraft --classic
+
+    - name: Run Tests
+      run: |
+        ./tests/run_tests.sh
