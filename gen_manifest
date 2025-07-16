@@ -11,9 +11,13 @@ mkdir -p $CRAFT_PRIME/usr/share/rocks/
     dpkg-query --admindir=$CRAFT_PRIME/var/lib/dpkg/ \
         -f '${db:Status-Abbrev},${binary:Package},${Version},${source:Package},${Source:Version}\n' \
         -W
+
     # include all .deb files in stage_packages
     for deb in /root/parts/*/stage_packages/*.deb; do 
-        dpkg-deb -W --showformat '${db:Status-Abbrev},${binary:Package},${Version},${source:Package},${Source:Version}\n' $deb 
+        # TODO: should we assume that all packages are installed correctly (ii)
+        dpkg-deb -W --showformat 'ii,${Package},${Version},,\n' $deb 
     done
-    
-} | tee $CRAFT_PRIME/usr/share/rocks/dpkg.query
+    # include all results from chisel manifest
+    zstdcat /root/parts/*/install/var/lib/chisel/manifest.wall | jq -r 'select(.kind == "package") | "ii," + .name + "," + .version + ",,"'
+
+} | sort | uniq | tee $CRAFT_PRIME/usr/share/rocks/dpkg.query
