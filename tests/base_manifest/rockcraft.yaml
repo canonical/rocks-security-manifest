@@ -17,8 +17,7 @@ parts:
 
   deb-security-manifest:
     plugin: make
-    source: https://github.com/canonical/rocks-security-manifest
-    source-type: git
-    source-branch: main
+    source: repo.tar
+    source-type: tar
     override-prime: gen_manifest
 

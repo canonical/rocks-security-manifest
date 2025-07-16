@@ -2,4 +2,18 @@
 
 set -x
 mkdir -p $CRAFT_PRIME/usr/share/rocks/
-(echo "# os-release" && cat /etc/os-release && echo "# dpkg-query" && dpkg-query --admindir=$CRAFT_PRIME/var/lib/dpkg/ -f '${db:Status-Abbrev},${binary:Package},${Version},${source:Package},${Source:Version}\n' -W) > $CRAFT_PRIME/usr/share/rocks/dpkg.query
+
+{
+    echo "# os-release"
+    cat /etc/os-release
+    echo "# dpkg-query"
+    # include all packages in the system
+    dpkg-query --admindir=$CRAFT_PRIME/var/lib/dpkg/ \
+        -f '${db:Status-Abbrev},${binary:Package},${Version},${source:Package},${Source:Version}\n' \
+        -W
+    # include all .deb files in stage_packages
+    for deb in /root/parts/*/stage_packages/*.deb; do 
+        dpkg-deb -W --showformat '${db:Status-Abbrev},${binary:Package},${Version},${source:Package},${Source:Version}\n' $deb 
+    done
+    
+} | tee $CRAFT_PRIME/usr/share/rocks/dpkg.query
