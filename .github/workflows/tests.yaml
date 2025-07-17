@@ -13,12 +13,10 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
-    # - name: Setup Environment
-    #   run: |
-    #     sudo snap install rockcraft --classic
+    - name: Setup Environment
+      run: |
+        sudo snap install rockcraft --classic
 
     - name: Run Tests
       run: |
-        ls
-        pwd
-        # ./tests/run_tests.sh
+        ./tests/run_all.sh
