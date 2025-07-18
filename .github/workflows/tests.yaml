@@ -7,7 +7,7 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-24.04  
+    runs-on: [jammy, amd64, large]
     
     steps:
     - name: Checkout code
@@ -15,8 +15,9 @@ jobs:
 
     - name: Setup Environment
       run: |
+        lxd init --auto  
         sudo snap install rockcraft --classic
 
     - name: Run Tests
       run: |
-        ./tests/run_tests.sh
+        ./tests/run_all.sh

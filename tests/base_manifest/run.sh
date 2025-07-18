@@ -20,7 +20,7 @@ rockcraft.skopeo --insecure-policy copy \
 
 # extract the manifest from the docker image
 manifest=$(mktemp)
-docker run -it --rm manifest:latest exec busybox cat "/usr/share/rocks/dpkg.query" > "$manifest"
+docker run --rm manifest:latest exec busybox cat "/usr/share/rocks/dpkg.query" > "$manifest"
 
 log INFO "Testing manifest exists and is not empty."
 test -s "$manifest"
