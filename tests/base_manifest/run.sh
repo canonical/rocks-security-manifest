@@ -28,3 +28,7 @@ test -s "$manifest"
 log INFO "Ensure manifest contains expected headers"
 grep -P "^# os-release" "$manifest" > /dev/null
 grep -P "^# dpkg-query" "$manifest" > /dev/null
+
+log INFO "Ensure manifest contains expected content"
+grep -P "^ii,busybox," "$manifest" > /dev/null
+grep -P "^ii,hello," "$manifest" > /dev/null

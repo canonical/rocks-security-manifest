@@ -1,8 +1,8 @@
 name: manifest
-summary: Hello World
-description: The most basic example of a rock.
+summary: A simple manifest test
+description: This rock tests the generation of a security manifest.
 version: "latest"
-license: Apache-2.0
+license: proprietary
 
 base: bare
 build-base: ubuntu@22.04
@@ -14,6 +14,12 @@ parts:
     plugin: nil
     stage-packages:
       - busybox
+
+  hello:
+    plugin: nil
+    stage-packages:
+      - hello_bins
+      - base-files_chisel
 
   deb-security-manifest:
     plugin: make
