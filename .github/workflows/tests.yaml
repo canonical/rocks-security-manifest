@@ -15,8 +15,6 @@ jobs:
 
     - name: Setup Environment
       run: |
-        # sudo snap install lxd
-        lxd init --auto  
         sudo snap install rockcraft --classic
 
     - name: Run Tests
