@@ -9,7 +9,7 @@ mkdir -p $CRAFT_PRIME/usr/share/rocks/
     echo "# dpkg-query"
     # include all packages in the system
     dpkg-query --admindir=$CRAFT_PRIME/var/lib/dpkg/ \
-        -f '${db:Status-Abbrev},${binary:Package},${Version},${source:Package},${Source:Version}\n' \
+        -f '${binary:Package}=${Version},${source:Package}=${Source:Version}\n' \
         -W
 
     # include all .deb files in stage_packages
