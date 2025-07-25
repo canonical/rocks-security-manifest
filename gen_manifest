@@ -2,4 +2,25 @@
 
 set -x
 mkdir -p $CRAFT_PRIME/usr/share/rocks/
-(echo "# os-release" && cat /etc/os-release && echo "# dpkg-query" && dpkg-query --admindir=$CRAFT_PRIME/var/lib/dpkg/ -f '${db:Status-Abbrev},${binary:Package},${Version},${source:Package},${Source:Version}\n' -W) > $CRAFT_PRIME/usr/share/rocks/dpkg.query
+
+manifest_path="$CRAFT_PRIME/usr/share/rocks/dpkg.query"
+
+echo "# os-release" > $manifest_path
+cat /etc/os-release >> $manifest_path
+
+echo "# dpkg-query" >> $manifest_path
+{
+    # include all packages in the system
+    dpkg-query --admindir=$CRAFT_PRIME/var/lib/dpkg/ \
+        -f '${binary:Package}=${Version},${source:Package}=${Source:Version}\n' \
+        -W
+
+    # include all .deb files in stage_packages
+    for deb in /root/parts/*/stage_packages/*.deb; do 
+        # TODO: should we assume that all packages are installed correctly (ii)
+        dpkg-deb -W --showformat 'ii,${Package},${Version},,\n' $deb 
+    done
+    # include all results from chisel manifest
+    zstdcat $CRAFT_STAGE/var/lib/chisel/manifest.wall | jq -r 'select(.kind == "package") | "ii," + .name + "," + .version + ",,"'
+
+} | sort | uniq | tee -a $manifest_path
