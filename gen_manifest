@@ -6,9 +6,9 @@ mkdir -p $CRAFT_PRIME/usr/share/rocks/
 manifest_path="$CRAFT_PRIME/usr/share/rocks/dpkg.query"
 
 echo "# os-release" > $manifest_path
-cat /etc/os-release > $manifest_path
+cat /etc/os-release >> $manifest_path
 
-echo "# dpkg-query" > $manifest_path
+echo "# dpkg-query" >> $manifest_path
 {
     # include all packages in the system
     dpkg-query --admindir=$CRAFT_PRIME/var/lib/dpkg/ \
@@ -23,4 +23,4 @@ echo "# dpkg-query" > $manifest_path
     # include all results from chisel manifest
     zstdcat $CRAFT_STAGE/var/lib/chisel/manifest.wall | jq -r 'select(.kind == "package") | "ii," + .name + "," + .version + ",,"'
 
-} | sort | uniq | tee $manifest_path
+} | sort | uniq | tee -a $manifest_path
