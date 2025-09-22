@@ -1,0 +1,8 @@
+#!/bin/bash
+PREFIX=${PREFIX:-/usr}
+BINDIR=${PREFIX}/bin
+SCRIPT=gen_manifest
+
+apt-get install -y zstd jq
+cp "$SCRIPT" "$BINDIR/$SCRIPT"
+chmod +x "$BINDIR/$SCRIPT"
